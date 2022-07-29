@@ -11,9 +11,9 @@ int _putchar(char c)
 }
 
 /**
-*
-
-
+*print_st - prints a string 
+*@c : pointer to the string it is pointing to.
+*Return : the number of i.
 */
 
 int print_st(char* c)
