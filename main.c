@@ -6,9 +6,13 @@
  * @argv: arguments passed to function
  * Return: 0(suceess)
  */
-int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
+int main(int argc __attribute__((unused)), char **argv)
 {
-    hsh_loop_func();
+    while (1)
+    {
+        prompt_user();
+        hsh_readline(int *inp);
+    }
 
     print_st("game");
     return 0;

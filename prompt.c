@@ -13,3 +13,18 @@ void prompt_user(void)
 	if (flags.interactive)
 		write(STDERR_FILENO, "$ ", 2);
 }
+
+/**
+ * hsh_readline - reads input from stdin
+ * ip: value from getline function
+ * Return: input string
+ */
+char hsh_readline(int *ip)
+{
+	char *input = NULL;
+	size_t bufsize = 0;
+
+	ip = getline(&input, &bufsize, stdin);
+
+	return (input);
+}
