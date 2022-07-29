@@ -1,5 +1,4 @@
 #include "shell.h"
-<<<<<<< HEAD
 
 /**
  * main - Entry point
@@ -14,6 +13,3 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
     print_st("game");
     return 0;
 }
-
-=======
->>>>>>> d4efb9105f072be200729b3dda842e7ad753906e
