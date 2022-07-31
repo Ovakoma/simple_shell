@@ -20,7 +20,7 @@ int print_st(char* c)
 {
   int i =0;
 
-  while (c[i] != NULL)
+  while (c[i] != '\0')
   {
     _putchar(c[i]);
     i++;

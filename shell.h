@@ -8,10 +8,14 @@
 
 /* Helper string manipualtion functions */
 char *_strcpy(char *dest, char *str);
-char *_strcmp(char *str1, char *str2);
+int _strcmp(char *str1, char *str2);
 char *_strcat(char *s1, const char *s2);
 int _strlen(char *str);
 
 void _free(char** buff);
+
+void hsh_readline(void);
+void prompt_user(void);
+int print_st(char *c);
 
 #endif

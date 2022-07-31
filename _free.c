@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 /**
 *_free: it frees up buffers.
 *@c- the buffer to be freed
@@ -12,9 +14,8 @@ void _free(char **buff)
         return ;
     while(buff[i])
     {
-        free (buffi]);
+	free(buff[i]);
         i++;
     }
     free(buff);
-
 }
