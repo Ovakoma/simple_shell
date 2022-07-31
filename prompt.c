@@ -8,9 +8,11 @@
 */
 void prompt_user(void)
 {
+	unsigned int flags = 0;
+
 	if ((isatty(STDIN_FILENO) == 1) && (isatty(STDOUT_FILENO) == 1))
-		flags.interactive = 1;
-	if (flags.interactive)
+		flags = 1;
+	if (flags)
 		write(STDERR_FILENO, "$ ", 2);
 }
 
@@ -27,11 +29,9 @@ void hsh_readline(void)
 	nread = getline(&input, &bufsize, stdin);
 	if (nread == -1)
 	{
-		printf("\n...logging out")
-		return (-1);
+		printf("\n...logging out");
+		return;
 	}
-	if (input == '\n' || input == '\0')
-		continue;
 	
 	bufcpy = malloc(sizeof(char) * nread);
 	_strcpy(bufcpy, input);

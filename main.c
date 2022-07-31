@@ -11,7 +11,7 @@ int main(int argc __attribute__((unused)), char **argv)
     while (1)
     {
         prompt_user();
-        hsh_readline(int *inp);
+        hsh_readline();
     }
 
     print_st("game");

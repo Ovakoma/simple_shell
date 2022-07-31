@@ -23,7 +23,7 @@ char *_strcpy(char *dest, char *str)
  * @str2: second string
  * Return: 0(success), -1 if str1 < str2
  */
-char *_strcmp(char *str1, char *str2)
+int _strcmp(char *str1, char *str2)
 {
     int i = 0;
 
@@ -47,8 +47,9 @@ char *_strcat(char *s1, const char *s2)
     int i = 0, len;
 
     len = _strlen(s1);
+
     while (s2[i])
-        s1[len++] = s2++;
+        s1[len++] = s2[i++];
     s1[len] = '\0';
 
     return (s1);
