@@ -16,15 +16,28 @@ void prompt_user(void)
 
 /**
  * hsh_readline - reads input from stdin
- * ip: value from getline function
- * Return: input string
+ * Return: void
  */
-char hsh_readline(int *ip)
+void hsh_readline(void)
 {
-	char *input = NULL;
+	char *input = NULL, *bufcpy = NULL;
 	size_t bufsize = 0;
+	ssize_t nread;
 
-	ip = getline(&input, &bufsize, stdin);
+	nread = getline(&input, &bufsize, stdin);
+	if (nread == -1)
+	{
+		printf("\n...logging out")
+		return (-1);
+	}
+	if (input == '\n' || input == '\0')
+		continue;
+	
+	bufcpy = malloc(sizeof(char) * nread);
+	_strcpy(bufcpy, input);
 
-	return (input);
+	parser(input, bufcpy);
+
+	free(input);
+	free(bufcpy);
 }
