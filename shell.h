@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -11,3 +12,5 @@ char *_strcpy(char *dest, char *str);
 char *_strcmp(char *str1, char *str2);
 char *_strcat(char *s1, char *s2);
 int *_strlen(char *str);
+
+void _free(char** buff);
