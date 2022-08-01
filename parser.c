@@ -9,7 +9,8 @@
  */
  void parser(char *input, char *bufcpy)
  {
-    char *tokens, delim[] = " \n", **argv = NULL;
+    char *token;
+    char delim[] = " \n", **argv = NULL;
     int n_token = 0, i;
 
     token = strtok(input, delim);

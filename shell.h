@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <string.h>
 
 #define TRUE 1
 #define FALSE 0
