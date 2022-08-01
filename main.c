@@ -10,10 +10,10 @@ int main(int argc __attribute__((unused)), char **argv)
 {
     while (1)
     {
-        prompt_user();
+        if (isatty(STDIN_FILENO))
+            prompt_user();
         hsh_readline();
     }
 
-    print_st("game");
     return 0;
 }

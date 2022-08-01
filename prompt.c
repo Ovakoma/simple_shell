@@ -8,12 +8,26 @@
 */
 void prompt_user(void)
 {
-	unsigned int flags = 0;
+	int slen, tlen, plen;
+	char *s, *t = "> ", *p, *prompt;
 
-	if ((isatty(STDIN_FILENO) == 1) && (isatty(STDOUT_FILENO) == 1))
-		flags = 1;
-	if (flags)
-		write(STDERR_FILENO, "$ ", 2);
+	slen = _strlen(s);
+	plen = _strlen(p);
+	tlen = _strlen(t);
+
+	prompt = malloc(sizeof(char) * (slen + plen + tlen));
+	if (!s || !p || !prompt)
+	{
+		printf("$ ");
+		return;
+	}
+	prompt = _strcpy(prompt, p);
+	prompt = _strcat(prompt, "@");
+	prompt = _strcat(prompt, s);
+	prompt = _strcat(prompt, t);
+
+	print_st(prompt);
+	free(prompt);
 }
 
 /**
