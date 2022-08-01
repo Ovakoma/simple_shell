@@ -6,7 +6,7 @@
  * @argv: arguments passed to function
  * Return: 0(suceess)
  */
-int main(int argc __attribute__((unused)), char **argv)
+int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
 {
     while (1)
     {
