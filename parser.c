@@ -78,7 +78,7 @@ char *_getenv(const char *var)
             j++;
             var++;
          }
-         if (env[i][j] == '=' && != *name)
+         if (env[i][j] == '=' && env[i][j] != *var)
                return ((*(env + i) + ++j));
          i++;
    }

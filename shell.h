@@ -14,7 +14,7 @@
 #define TRUE 1
 #define FALSE 0
 
-extern char **env
+extern char **env;
 
 /* Helper string manipualtion functions */
 char *_strcpy(char *dest, char *str);
@@ -29,6 +29,6 @@ void prompt_user(void);
 int print_st(char *c);
 void hsh_exec(char **argv);
 void parser(char *input, char *bufcpy);
-char *_getenv(char *var);
+char *_getenv(const char *var);
 
 #endif
