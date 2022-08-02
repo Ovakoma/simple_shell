@@ -9,7 +9,7 @@
 void prompt_user(void)
 {
 	int slen, tlen, plen;
-	char *s, *t = "> ", *p, *prompt;
+	char *s = _getenv("USER"), *t = "> ", *p = _getenv("NAME"), *prompt;
 
 	slen = _strlen(s);
 	plen = _strlen(p);

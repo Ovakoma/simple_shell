@@ -59,3 +59,28 @@
       }
       execve(argv[0], argv, NULL);
  }
+
+/**
+ * _getenv - get the value of an environmental variable
+ * @var: variable name
+ * Return: variable name
+ */
+char *_getenv(const char *var)
+{
+   int i = 0, j = 0;
+
+   while (env[i])
+   {
+         while (env[i][j] && *var)
+         {
+            if (env[i][j] != *var || (env[i][j] == '='))
+                  break;
+            j++;
+            var++;
+         }
+         if (env[i][j] == '=' && != *name)
+               return ((*(env + i) + ++j));
+         i++;
+   }
+   return (NULL);
+}
