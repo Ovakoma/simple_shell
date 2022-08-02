@@ -40,18 +40,17 @@ void hsh_readline(void)
 	size_t bufsize = 0;
 	ssize_t nread;
 
-	nread = getline(&input, &bufsize, stdin);
-	if (nread == -1)
+	while (1)
 	{
-		printf("\n...logging out");
-		return;
+		nread = getline(&input, &bufsize, stdin);
+		if (nread == -1)
+		{
+			printf("\n...logging out");
+			return;
+		}
+		if (*input == '\n' || *input == '\0')
+			continue;
 	}
-	
-	bufcpy = malloc(sizeof(char) * nread);
-	_strcpy(bufcpy, input);
-
-	parser(input, bufcpy);
-
-	free(input);
-	free(bufcpy);
+	input = rem_nl(input);
+	token = parser(input);
 }

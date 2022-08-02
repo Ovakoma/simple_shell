@@ -1,43 +1,51 @@
 #include "shell.h"
 
 /**
+ * rem_nl - removes a newline character
+ * input: string passed to function
+ * Return: input without newline
+ */
+char *rem_nl(char *input)
+{
+      char *temp = input;
+
+      temp = strtok(input, "\n");
+      return (temp); 
+}
+
+/**
  * parser - removes delimeters(space) and newline
  * from command input for execution
  * @input: string input being received 
  * @bufcpy: copy of string input for other purposes
  * Return: void
  */
- void parser(char *input, char *bufcpy)
- {
-    char *token;
-    char delim[] = " \n", **argv = NULL;
-    int n_token = 0, i;
+char **parser(char *input)
+{
+   char *token, *temp, **argv = NULL;
+   int i = 0;
 
-    token = strtok(input, delim);
-    while (token)
-    {
-      n_token++;
-      token = strtok(NULL, delim);
-    }
-    n_token++;
-    argv = malloc(sizeof(char *) * n_token);
-    token = strtok(bufcpy, delim);
-    for (i = 0; token; i++)
-    {
-         argv[i] = malloc(sizeof(char) * _strlen(token));
-         _strcpy(argv[i], token);
-         token = strtok(NULL, delim);
+   if (!input)
+      return (NULL);
+   argv = malloc(sizeof(char) * _strlen(input));
+   if (!argv)
+   {
+      perror("Logging out");
+      return (NULL);
+   }
+   input = rem_nl(input);
+   temp = _strdup(input);
+   token = strtok(temp, " ");
 
-         if (token == NULL)
-         {
-               i++;
-               argv[i] = NULL;
-         }
-    }
-    hsh_exec(argv);
-    free(argv);
-    free(token);
- }
+   while (token)
+   {
+      argv[i] = _strdup(token);
+      token = strtok(NULL, " ");
+   }
+   argv[i] = NULL;
+   free(temp);
+   return (argv);
+}
 
 /**
  * hsh_exec - executes users parsed input

@@ -70,3 +70,25 @@ int _strlen(char *str)
         ;
     return (i);
 }
+
+/**
+ * _strdup - duplicates a string
+ * @str: string passed to function
+ * Return: pointer to duplicated string
+ */
+char *_strdup(char *str)
+{
+    int i, size = _strlen(str) + 1;
+    char *dest;
+
+    if (!str)
+        return (NULL);
+    dest = malloc(sizeof(char) * size);
+    if (!dest)
+        return (NULL);
+    for (i = 0; i < size; i++)
+        *(dest + i) = *(str + i);
+    
+    *(dest + i) = '\0';
+    return (dest);
+}
