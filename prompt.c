@@ -53,7 +53,4 @@ void hsh_readline(void)
 	}
 	input = rem_nl(input);
 	token = parser(input);
-
-	if (!token || !token[0])
-		continue;
 }
