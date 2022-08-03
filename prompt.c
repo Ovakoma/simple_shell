@@ -18,7 +18,7 @@ void prompt_user(void)
 	prompt = malloc(sizeof(char) * (slen + plen + tlen));
 	if (!s || !p || !prompt)
 	{
-		printf("$ ");
+		printf("cisfun$ ");
 		return;
 	}
 	prompt = _strcpy(prompt, p);
@@ -53,4 +53,7 @@ void hsh_readline(void)
 	}
 	input = rem_nl(input);
 	token = parser(input);
+
+	if (!token || !token[0])
+		continue;
 }

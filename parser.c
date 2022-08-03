@@ -48,27 +48,6 @@ char **parser(char *input)
 }
 
 /**
- * hsh_exec - executes users parsed input
- * @argv: argument passed to function
- */
- void hsh_exec(char **argv)
- {
-      pid_t pid = fork();
-
-      if (pid != 0)
-      {
-            wait(NULL);
-            hsh_readline();
-      }
-      else
-      {
-            if (execve(argv[0], argv, NULL) == -1)
-                  perror("No such file or directory");
-      }
-      execve(argv[0], argv, NULL);
- }
-
-/**
  * _getenv - get the value of an environmental variable
  * @var: variable name
  * Return: variable name
@@ -77,17 +56,17 @@ char *_getenv(const char *var)
 {
    int i = 0, j = 0;
 
-   while (env[i])
+   while (environ[i])
    {
-         while (env[i][j] && *var)
+         while (environ[i][j] && *var)
          {
-            if (env[i][j] != *var || (env[i][j] == '='))
+            if (environ[i][j] != *var || (environ[i][j] == '='))
                   break;
             j++;
             var++;
          }
-         if (env[i][j] == '=' && env[i][j] != *var)
-               return ((*(env + i) + ++j));
+         if (environ[i][j] == '=' && environ[i][j] != *var)
+               return ((*(environ + i) + ++j));
          i++;
    }
    return (NULL);
