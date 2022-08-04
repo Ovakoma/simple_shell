@@ -16,12 +16,25 @@
 
 extern char **environ;
 
+/**
+ * struct builtin_t - struct for builtin commands
+ * @cmd: the command's name
+ * @f: pointer to function
+ */
+typedef struct builtin_t
+{
+    char *cmd;
+    int *f(char **, int, char *);
+} builtin_t;
+
 /* Helper string manipualtion functions */
 char *_strcpy(char *dest, char *str);
 int _strcmp(char *str1, char *str2);
 char *_strcat(char *s1, const char *s2);
 int _strlen(char *str);
 char *_strdup(char *str);
+int _atoi(char *str);
+int _isalpha(char *c);
 
 void _free(char** buff);
 
