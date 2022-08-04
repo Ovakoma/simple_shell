@@ -1,5 +1,18 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "shell.h"
+
+/**
+ * free_p - frees pointer
+ * ptr: pointer to be freed
+ */
+void free_p(char *ptr)
+{
+	if (ptr != NULL)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
+	ptr = NULL;
+}
 
 /**
 *_free: it frees up buffers.
@@ -26,9 +39,9 @@ void _free(char **buff)
  *
  * Return: 0 if true, else 1
  */
-int _isalpha(char *c)
+int _isalpha(char c)
 {
-        if (c >= 48) && (c <= 57)
+        if ((c >= 48) && (c <= 57))
                 return (1);
         return (0);
 }

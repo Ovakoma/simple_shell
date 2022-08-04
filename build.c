@@ -1,4 +1,4 @@
-include "shell.h"
+#include "shell.h"
 
 /**
  * check_builtins - checks if command is a builtin command
@@ -8,8 +8,8 @@ include "shell.h"
 builtin_t check_builtins(char *cmd)
 {
         builtin_t builtins[] = {
-                {"exit", "exit_cmd"},
-                {"env", "env_cmd"},
+                {"exit", exit_cmd},
+                {"env", env_cmd},
                 {NULL, NULL}
         };
         int i;
@@ -26,7 +26,7 @@ builtin_t check_builtins(char *cmd)
  * @cmd: an array of command and its arguments
  * Return: function to be executed, else NULL
  */
-builtin_t is_builtin(char *cmd)
+int (*is_builtin(char **cmd))(char **, int, char *)
 {
         builtin_t init = check_builtins(cmd[0]);
 
@@ -41,11 +41,15 @@ builtin_t is_builtin(char *cmd)
  * @cmd: Unused
  * @status: status
  * @filename: the name of the file
- * Return: 0(sucess)
+ * Return: 0(success)
  */
-int env_cmd(char *cmd __attribute__((unused)), int status __attribute__((unused)), char *filename __attribute__((unused)))
+int env_cmd(char **cmd, int status, char *filename)
 {
-        int i = 0
+	int i = 0;
+
+	(void) cmd;
+	(void) status;
+	(void) filename;
 
         while (environ[i])
         {
@@ -64,7 +68,7 @@ int env_cmd(char *cmd __attribute__((unused)), int status __attribute__((unused)
  * Return: exit with the status code given by user, or
  * previous execution status code
  */
-int exit_cmd(char *cmd, int status, char *filename)
+int exit_cmd(char **cmd, int status, char *filename)
 {
         int i;
 

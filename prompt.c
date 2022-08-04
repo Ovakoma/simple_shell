@@ -36,7 +36,7 @@ void prompt_user(void)
  */
 void hsh_readline(void)
 {
-	char *input = NULL, *token = NULL, **argv;
+	char *input = NULL, **token = NULL, **argv = NULL;
 	size_t bufsize = 0;
 	ssize_t nread;
 	int status, (*builtin)(char **, int, char*);
@@ -51,21 +51,22 @@ void hsh_readline(void)
 		}
 		if (*input == '\n' || *input == '\0')
 			continue;
-	}
-	input = rem_nl(input);
-	
-	token = parser(input);
-	if (!token || !token[0])
+		
+		input = rem_nl(input);
+		token = parser(input);
+		
+		if (!token || !token[0])
 			continue;
-	builtin = check_builtins(token);
-	if (builtin)
-	{
-			status = builtin(char token, status, argv[0]);
+		builtin = is_builtin(token);
+		if (builtin)
+		{
+			status = builtin(token, status, argv[0]);
 			_free(token);
 			continue;
-	}
-	else
-			execution(token, argv[0]);
+		}
+		else
+			execution(argv[0], token);
 
-	_free(token);
+		_free(token);
+	}
 }
