@@ -41,7 +41,6 @@ int _isalpha(char c);
 void _free(char** buff);
 void free_p(char *ptr);
 
-void hsh_readline(void);
 void prompt_user(void);
 int print_st(char *c);
 char **parser(char *input);

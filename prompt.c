@@ -18,7 +18,7 @@ void prompt_user(void)
 	prompt = malloc(sizeof(char) * (slen + plen + tlen));
 	if (!s || !p || !prompt)
 	{
-		printf("cisfun$ ");
+		printf("#cisfun$ ");
 		return;
 	}
 	prompt = _strcpy(prompt, p);
@@ -28,45 +28,4 @@ void prompt_user(void)
 
 	print_st(prompt);
 	free(prompt);
-}
-
-/**
- * hsh_readline - reads input from stdin
- * Return: void
- */
-void hsh_readline(void)
-{
-	char *input = NULL, **token = NULL, **argv = NULL;
-	size_t bufsize = 0;
-	ssize_t nread;
-	int status, (*builtin)(char **, int, char*);
-
-	while (1)
-	{
-		nread = getline(&input, &bufsize, stdin);
-		if (nread == -1)
-		{
-			printf("\n...logging out");
-			return;
-		}
-		if (*input == '\n' || *input == '\0')
-			continue;
-		
-		input = rem_nl(input);
-		token = parser(input);
-		
-		if (!token || !token[0])
-			continue;
-		builtin = is_builtin(token);
-		if (builtin)
-		{
-			status = builtin(token, status, argv[0]);
-			_free(token);
-			continue;
-		}
-		else
-			execution(argv[0], token);
-
-		_free(token);
-	}
 }
