@@ -16,13 +16,14 @@ int main(int ac __attribute__((unused)), char **av)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
-            prompt_user();
+			prompt_user();
 
 		nread = getline(&input, &bufsize, stdin);
 		if (nread == -1)
 		{
+			free(input);
 			printf("\n...logging out");
-			return;
+			exit(EXIT_FAILURE);
 		}
 		if (*input == '\n' || *input == '\0')
 			continue;
