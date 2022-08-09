@@ -2,11 +2,11 @@
 
 /**
  * execution - executes commands entered by users
- *@cp: command
- *@cmd:vector array of pointers to commands
+ * @cp: command
+ * @cmd:vector array of pointers to commands
  * Return: 0
  */
-void execution(char *cp, char **cmd)
+int execution(char *cp, char **cmd)
 {
 	pid_t child_pid;
 	int status;
@@ -36,6 +36,7 @@ void execution(char *cp, char **cmd)
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 	}
+	return (0);
 }
 /**
  * check_cmd_path - check if command is in path
@@ -43,14 +44,14 @@ void execution(char *cp, char **cmd)
  *
  * Return: 0 if found, else 1
  */
-int check_cmd_path(**cmd)
+int check_cmd_path(char **cmd)
 {
 	char *path, *val, *cmd_path;
 	struct stat buff;
 
-	*cmd_path = _getenv("PATH");
+	path = _getenv("PATH");
 	val = strtok(path, ":");
-	while (value)
+	while (val)
 	{
 		cmd_path = build_path(*cmd, val);
 		if (stat(cmd_path, &buff) == 0)
@@ -71,7 +72,7 @@ int check_cmd_path(**cmd)
  *
  * Return: @val/@cmd - the path of command
  */
-char build_path(char *cmd, char *val)
+char *build_path(char *cmd, char *val)
 {
 	size_t len = _strlen(val) + _strlen(cmd) + 2;
 	char *cm_d = malloc(sizeof(char) * len);
