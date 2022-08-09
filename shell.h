@@ -52,5 +52,7 @@ int (*is_builtin(char **cmd))(char **, int, char *);
 int env_cmd(char **, int, char *);
 int exit_cmd(char **, int, char *);
 void execution(char *cp, char **cmd);
+int check_cmd_path(char **cmd);
+char build_path(char *cmd, char *val);
 
 #endif

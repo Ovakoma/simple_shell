@@ -41,6 +41,7 @@ char **parser(char *input)
    {
       argv[i] = _strdup(token);
       token = strtok(NULL, " ");
+      i++;
    }
    argv[i] = NULL;
    free(temp);
