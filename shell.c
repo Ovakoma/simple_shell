@@ -27,10 +27,10 @@ int main(int ac __attribute__((unused)), char **av)
 		}
 		if (*input == '\n' || *input == '\0')
 			continue;
-		
+
 		input = rem_nl(input);
 		token = parser(input);
-		
+
 		if (!token || !token[0])
 			continue;
 		builtin = is_builtin(token);
@@ -41,9 +41,9 @@ int main(int ac __attribute__((unused)), char **av)
 			continue;
 		}
 		else
-			execution(av[0], token);
+		execution(av[0], token);
 
 		_free(token);
 	}
-    return (0);
+	return (0);
 }

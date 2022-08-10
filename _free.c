@@ -2,7 +2,7 @@
 
 /**
  * free_p - frees pointer
- * ptr: pointer to be freed
+ * @ptr: pointer to be freed
  */
 void free_p(char *ptr)
 {
@@ -15,22 +15,24 @@ void free_p(char *ptr)
 }
 
 /**
-*_free: it frees up buffers.
-*@c- the buffer to be freed
-*Return - doent return anything
-*/
+ * _free - it frees up buffers.
+ * Description: frees double pointers
+ * @buff: the buffer to be freed
+ * Return - doent return anything
+ */
 
 void _free(char **buff)
 {
-    int i;
-    if (!buff || buff == NULL)
-        return ;
-    while(buff[i])
-    {
-	free(buff[i]);
-        i++;
-    }
-    free(buff);
+	int i;
+
+	if (!buff || buff == NULL)
+		return;
+	while (buff[i])
+	{
+		free(buff[i]);
+		i++;
+	}
+	free(buff);
 }
 
 /**
@@ -41,9 +43,9 @@ void _free(char **buff)
  */
 int _isalpha(char c)
 {
-        if ((c >= 48) && (c <= 57))
-                return (1);
-        return (0);
+	if ((c >= 48) && (c <= 57))
+		return (1);
+	return (0);
 }
 
 /**
@@ -57,7 +59,7 @@ int _atoi(char *str)
 	int len = 0, i = 0, FLAG = 0, d = 0, n = 0, digit;
 
 	while (str[len] != '\0')
-            len++;
+		len++;
 
 	while (i < len && FLAG == 0)
 	{

@@ -7,18 +7,19 @@
  */
 builtin_t check_builtins(char *cmd)
 {
-        builtin_t builtins[] = {
-                {"exit", exit_cmd},
-                {"env", env_cmd},
-                {NULL, NULL}
-        };
-        int i;
-        for (i = 0; builtins[i].cmd; i++)
-        {
-                if (_strcmp(builtins[i].cmd, cmd) == 1)
-                        return (builtins[i]);
-        }
-        return (builtins[i]);
+	builtin_t builtins[] = {
+		{"exit", exit_cmd},
+		{"env", env_cmd},
+		{NULL, NULL}
+	};
+	int i;
+
+	for (i = 0; builtins[i].cmd; i++)
+	{
+		if (_strcmp(builtins[i].cmd, cmd) == 1)
+			return (builtins[i]);
+	}
+	return (builtins[i]);
 }
 
 /**
@@ -28,12 +29,12 @@ builtin_t check_builtins(char *cmd)
  */
 int (*is_builtin(char **cmd))(char **, int, char *)
 {
-        builtin_t init = check_builtins(cmd[0]);
+	builtin_t init = check_builtins(cmd[0]);
 
-        if (init.cmd)
-                return (init.f);
+	if (init.cmd)
+		return (init.f);
 
-        return (NULL);
+	return (NULL);
 }
 
 /**
@@ -51,13 +52,13 @@ int env_cmd(char **cmd, int status, char *filename)
 	(void) status;
 	(void) filename;
 
-        while (environ[i])
-        {
-                print_st(environ[i]);
-                _putchar('\n');
-                i++;
-        }
-        return (0);
+	while (environ[i])
+	{
+		print_st(environ[i]);
+		_putchar('\n');
+		i++;
+	}
+	return (0);
 }
 
 /**
@@ -70,29 +71,29 @@ int env_cmd(char **cmd, int status, char *filename)
  */
 int exit_cmd(char **cmd, int status, char *filename)
 {
-        int i;
+	int i;
 
-        if (!cmd[1])
-        {
-            _free(cmd);
-            exit(status);
-        }
-        while (cmd[1][i])
-        {
-                if (_isalpha(cmd[1][i]) && cmd[1][i] != '-')
-                {
-                    print_st(filename);
-                    print_st(": ");
-                    print_st(cmd[0]);
-                    print_st("illegal number: ");
-                    print_st(cmd[1]);
-                    _putchar('\n');
-                    return (1);
-                }
-                i++;
-        }
-        status = _atoi(cmd[1]);
-        _free(cmd);
+	if (!cmd[1])
+	{
+		_free(cmd);
+		exit(status)
+	}
+	while (cmd[1][i])
+	{
+		if (_isalpha(cmd[1][i]) && cmd[1][i] != '-')
+		{
+			print_st(filename);
+			print_st(": ");
+			print_st(cmd[0]);
+			print_st("illegal number: ");
+			print_st(cmd[1]);
+			_putchar('\n');
+			return (1);
+		}
+		i++;
+	}
+	status = _atoi(cmd[1]);
+	_free(cmd);
 
-        exit(status);
+	exit(status);
 }
