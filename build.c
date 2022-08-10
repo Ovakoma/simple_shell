@@ -1,99 +1,107 @@
 #include "shell.h"
 
 /**
- * check_builtins - checks if command is a builtin command
- * @cmd: command passed to function
- * Return: index of command
+ * get_builtin - builtin that pais the command in the arg
+ * @cmd: command
+ * Return: function pointer of the builtin command
  */
-builtin_t check_builtins(char *cmd)
+int (*get_builtin(char *cmd))(data_shell *)
 {
-	builtin_t builtins[] = {
-		{"exit", exit_cmd},
-		{"env", env_cmd},
-		{NULL, NULL}
+	builtin_t builtin[] = {
+		{ "env", _env },
+		{ "exit", exit_shell },
+		{ "setenv", _setenv },
+		{ "unsetenv", _unsetenv },
+		{ "cd", cd_shell },
+		{ "help", get_help },
+		{ NULL, NULL }
 	};
 	int i;
 
-	for (i = 0; builtins[i].cmd; i++)
+	for (i = 0; builtin[i].name; i++)
 	{
-		if (_strcmp(builtins[i].cmd, cmd) == 1)
-			return (builtins[i]);
+		if (_strcmp(builtin[i].name, cmd) == 0)
+			break;
 	}
-	return (builtins[i]);
+
+	return (builtin[i].f);
 }
 
 /**
- * is_builtin - If command is a builtin command
- * @cmd: an array of command and its arguments
- * Return: function to be executed, else NULL
+ * cmp_env_name - compares env variables names
+ * with the name passed.
+ * @nenv: name of the environment variable
+ * @name: name passed
+ *
+ * Return: 0 if are not equal. Another value if they are.
  */
-int (*is_builtin(char **cmd))(char **, int, char *)
-{
-	builtin_t init = check_builtins(cmd[0]);
-
-	if (init.cmd)
-		return (init.f);
-
-	return (NULL);
-}
-
-/**
- * env_cmd - funtion of env command
- * @cmd: Unused
- * @status: status
- * @filename: the name of the file
- * Return: 0(success)
- */
-int env_cmd(char **cmd, int status, char *filename)
-{
-	int i = 0;
-
-	(void) cmd;
-	(void) status;
-	(void) filename;
-
-	while (environ[i])
-	{
-		print_st(environ[i]);
-		_putchar('\n');
-		i++;
-	}
-	return (0);
-}
-
-/**
- * exit_cmd - function of exit command
- * @cmd: an array of given command and its arguments
- * @status: status
- * @filename: name of the file
- * Return: exit with the status code given by user, or
- * previous execution status code
- */
-int exit_cmd(char **cmd, int status, char *filename)
+int cmp_env_name(const char *nenv, const char *name)
 {
 	int i;
 
-	if (!cmd[1])
+	for (i = 0; nenv[i] != '='; i++)
 	{
-		_free(cmd);
-		exit(status)
-	}
-	while (cmd[1][i])
-	{
-		if (_isalpha(cmd[1][i]) && cmd[1][i] != '-')
+		if (nenv[i] != name[i])
 		{
-			print_st(filename);
-			print_st(": ");
-			print_st(cmd[0]);
-			print_st("illegal number: ");
-			print_st(cmd[1]);
-			_putchar('\n');
-			return (1);
+			return (0);
 		}
-		i++;
 	}
-	status = _atoi(cmd[1]);
-	_free(cmd);
 
-	exit(status);
+	return (i + 1);
+}
+
+/**
+ * _getenv - get an environment variable
+ * @name: name of the environment variable
+ * @_environ: environment variable
+ *
+ * Return: value of the environment variable if is found.
+ * In other case, returns NULL.
+ */
+char *_getenv(const char *name, char **_environ)
+{
+	char *ptr_env;
+	int i, mov;
+
+	/* Initialize ptr_env value */
+	ptr_env = NULL;
+	mov = 0;
+	/* Compare all environment variables */
+	/* environ is declared in the header file */
+	for (i = 0; _environ[i]; i++)
+	{
+		/* If name and env are equal */
+		mov = cmp_env_name(_environ[i], name);
+		if (mov)
+		{
+			ptr_env = _environ[i];
+			break;
+		}
+	}
+
+	return (ptr_env + mov);
+}
+
+/**
+ * _env - prints the evironment variables
+ *
+ * @datash: data relevant.
+ * Return: 1 on success.
+ */
+int _env(data_shell *datash)
+{
+	int i, j;
+
+	for (i = 0; datash->_environ[i]; i++)
+	{
+
+		for (j = 0; datash->_environ[i][j]; j++)
+			;
+
+		write(STDOUT_FILENO, datash->_environ[i], j);
+		write(STDOUT_FILENO, "\n", 1);
+	}
+	datash->status = 0;
+
+	return (1);
 }

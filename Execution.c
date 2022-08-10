@@ -1,89 +1,150 @@
 #include "shell.h"
 
 /**
- * execution - executes commands entered by users
- * @cp: command
- * @cmd:vector array of pointers to commands
- * Return: 0
- */
-int execution(char *cp, char **cmd)
-{
-	pid_t child_pid;
-	int status;
-
-	if (!*cmd)
-		exit(98);
-	child_pid = fork();
-	if (child_pid < 0)
-	{
-		perror(cp);
-		exit(98);
-	}
-	if (child_pid == 0)
-	{
-		if (strncmp(cmd[0], "./", 2) && strncmp(cmd[0], "/", 1))
-			check_cmd_path(cmd);
-		if (execve(cmd[0], cmd, environ) == -1)
-		{
-			perror(cp);
-			_free(cmd);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		wait(&status);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-	}
-	return (0);
-}
-/**
- * check_cmd_path - check if command is in path
- * @cmd: an array of command strings
+ * exec_line - finds builtins and commands
  *
- * Return: 0 if found, else 1
+ * @datash: data relevant (args)
+ * Return: 1 on success.
  */
-int check_cmd_path(char **cmd)
+int exec_line(data_shell *datash)
 {
-	char *path, *val, *cmd_path;
-	struct stat buff;
+	int (*builtin)(data_shell *datash);
 
-	path = _getenv("PATH");
-	val = strtok(path, ":");
-	while (val)
+	if (datash->args[0] == NULL)
+		return (1);
+
+	builtin = get_builtin(datash->args[0]);
+
+	if (builtin != NULL)
+		return (builtin(datash));
+
+	return (cmd_exec(datash));
+}
+
+/**
+ * copy_info - copies info to create
+ * a new env or alias
+ * @name: name (env or alias)
+ * @value: value (env or alias)
+ *
+ * Return: new env or alias.
+ */
+char *copy_info(char *name, char *value)
+{
+	char *new;
+	int len_name, len_value, len;
+
+	len_name = _strlen(name);
+	len_value = _strlen(value);
+	len = len_name + len_value + 2;
+	new = malloc(sizeof(char) * (len));
+	_strcpy(new, name);
+	_strcat(new, "=");
+	_strcat(new, value);
+	_strcat(new, "\0");
+
+	return (new);
+}
+
+/**
+ * set_env - sets an environment variable
+ *
+ * @name: name of the environment variable
+ * @value: value of the environment variable
+ * @datash: data structure (environ)
+ * Return: no return
+ */
+void set_env(char *name, char *value, data_shell *datash)
+{
+	int i;
+	char *var_env, *name_env;
+
+	for (i = 0; datash->_environ[i]; i++)
 	{
-		cmd_path = build_path(*cmd, val);
-		if (stat(cmd_path, &buff) == 0)
+		var_env = _strdup(datash->_environ[i]);
+		name_env = _strtok(var_env, "=");
+		if (_strcmp(name_env, name) == 0)
 		{
-			*cmd = _strdup(cmd_path);
-			free(cmd_path);
-			return (0);
+			free(datash->_environ[i]);
+			datash->_environ[i] = copy_info(name_env, value);
+			free(var_env);
+			return;
 		}
-		free(cmd_path);
-		val = strtok(NULL, ":");
+		free(var_env);
 	}
+
+	datash->_environ = _reallocdp(datash->_environ, i, sizeof(char *) * (i + 2));
+	datash->_environ[i] = copy_info(name, value);
+	datash->_environ[i + 1] = NULL;
+}
+
+/**
+ * _setenv - compares env variables names
+ * with the name passed.
+ * @datash: data relevant (env name and env value)
+ *
+ * Return: 1 on success.
+ */
+int _setenv(data_shell *datash)
+{
+
+	if (datash->args[1] == NULL || datash->args[2] == NULL)
+	{
+		get_error(datash, -1);
+		return (1);
+	}
+
+	set_env(datash->args[1], datash->args[2], datash);
+
 	return (1);
 }
+
 /**
- * build_path - build the path to a command
- * @cmd: the given command
- * @val: the path to build for @token
+ * _unsetenv - deletes a environment variable
  *
- * Return: @val/@cmd - the path of command
+ * @datash: data relevant (env name)
+ *
+ * Return: 1 on success.
  */
-char *build_path(char *cmd, char *val)
+int _unsetenv(data_shell *datash)
 {
-	size_t len = _strlen(val) + _strlen(cmd) + 2;
-	char *cm_d = malloc(sizeof(char) * len);
+	char **realloc_environ;
+	char *var_env, *name_env;
+	int i, j, k;
 
-	if (!cmd)
-		return (NULL);
-	memset(cm_d, 0, len);
-
-	cm_d = _strcat(cm_d, val);
-	cm_d = _strcat(cm_d, "/");
-	cm_d = _strcat(cm_d, cmd);
-
-	return (cm_d);
+	if (datash->args[1] == NULL)
+	{
+		get_error(datash, -1);
+		return (1);
+	}
+	k = -1;
+	for (i = 0; datash->_environ[i]; i++)
+	{
+		var_env = _strdup(datash->_environ[i]);
+		name_env = _strtok(var_env, "=");
+		if (_strcmp(name_env, datash->args[1]) == 0)
+		{
+			k = i;
+		}
+		free(var_env);
+	}
+	if (k == -1)
+	{
+		get_error(datash, -1);
+		return (1);
+	}
+	realloc_environ = malloc(sizeof(char *) * (i));
+	for (i = j = 0; datash->_environ[i]; i++)
+	{
+		if (i != k)
+		{
+			realloc_environ[j] = datash->_environ[i];
+			j++;
+		}
+	}
+	realloc_environ[j] = NULL;
+	free(datash->_environ[k]);
+	free(datash->_environ);
+	datash->_environ = realloc_environ;
+	return (1);
 }
