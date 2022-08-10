@@ -60,7 +60,7 @@ char *_strcat(char *s1, const char *s2)
  * @str: string passed to function
  * Return: length of string
  */
-int _strlen(char *str)
+int _strlen(const char *str)
 {
 	int i;
 
@@ -76,7 +76,7 @@ int _strlen(char *str)
  * @str: string passed to function
  * Return: pointer to duplicated string
  */
-char *_strdup(char *str)
+char *_strdup(const char *str)
 {
 	int i, size = _strlen(str) + 1;
 	char *dest;
