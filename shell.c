@@ -1,49 +1,65 @@
-#include "shell.h"
+#include "main.h"
+
+/**
+ * free_data - frees data structure
+ * @datash: data structure
+ * Return: no return
+ */
+void free_data(data_shell *datash)
+{
+	unsigned int i;
+
+	for (i = 0; datash->_environ[i]; i++)
+		free(datash->_environ[i]);
+
+	free(datash->_environ);
+	free(datash->pid);
+}
+
+/**
+ * set_data - Initialize data structure
+ * @datash: data structure
+ * @av: argument vector
+ * Return: no return
+ */
+void set_data(data_shell *datash, char **av)
+{
+	unsigned int i = 0;
+
+	datash->av = av;
+	datash->input = NULL;
+	datash->args = NULL;
+	datash->status = 0;
+	datash->counter = 1;
+
+	while (environ[i])
+		i++;
+
+	datash->_environ = malloc(sizeof(char *) * (i + 1));
+	for (i = 0; environ[i]; i++)
+	{
+		datash->_environ[i] = _strdup(environ[i]);
+	}
+	datash->_environ[i] = NULL;
+	datash->pid = aux_itoa(getpid());
+}
 
 /**
  * main - Entry point
- * @ac: number of arguments passed to function
- * @av: arguments passed to function
- * Return: 0(suceess)
+ * @ac: argument count
+ * @av: argument vector
+ * Return: 0 on success.
  */
-int main(int ac __attribute__((unused)), char **av)
+int main(int ac, char **av)
 {
-	char *input = NULL, **token = NULL;
-	size_t bufsize = 0;
-	ssize_t nread;
-	int status, (*builtin)(char **, int, char*);
+	data_shell datash;
+	(void) ac;
 
-	while (1)
-	{
-		if (isatty(STDIN_FILENO))
-			prompt_user();
-
-		nread = getline(&input, &bufsize, stdin);
-		if (nread == -1)
-		{
-			free(input);
-			printf("\n...logging out");
-			exit(EXIT_FAILURE);
-		}
-		if (*input == '\n' || *input == '\0')
-			continue;
-
-		input = rem_nl(input);
-		token = parser(input);
-
-		if (!token || !token[0])
-			continue;
-		builtin = is_builtin(token);
-		if (builtin)
-		{
-			status = builtin(token, status, av[0]);
-			_free(token);
-			continue;
-		}
-		else
-		execution(av[0], token);
-
-		_free(token);
-	}
-	return (0);
+	signal(SIGINT, get_sigint);
+	set_data(&datash, av);
+	shell_loop(&datash);
+	free_data(&datash);
+	if (datash.status < 0)
+		return (255);
+	return (datash.status);
 }
