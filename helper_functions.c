@@ -8,12 +8,15 @@
  */
 char *_strcpy(char *dest, char *str)
 {
-	char *temp = dest;
+	size_t i = 0;
 
-	while (str)
-		*temp++ = *str++;
+	while (str[i] != '\0')
+	{
+		dest[i] = str[i];
+		i++;
+	}
 
-	*temp = '\0';
+	dest[i] = '\0';
 	return (dest);
 }
 
@@ -27,12 +30,13 @@ int _strcmp(char *str1, char *str2)
 {
 	int i = 0;
 
-	while (str1[i])
-	{
-		if (str1[i] != str2[i])
-			return (str1[i] - str2[i]);
+	while ((str1[i] == str2[i]) && str1[i])
 		i++;
-	}
+
+	if (str1[i] > str2[i])
+		return (1);
+	if (str1[i] < str2[i])
+		return (-1);
 	return (0);
 }
 
@@ -66,7 +70,7 @@ int _strlen(const char *str)
 
 	if (!str)
 		return (0);
-	for (i = 0; str[i]; i++)
+	for (i = 0; str[i] != 0; i++)
 		;
 	return (i);
 }
@@ -78,17 +82,15 @@ int _strlen(const char *str)
  */
 char *_strdup(const char *str)
 {
-	int i, size = _strlen(str) + 1;
+	size_t size = _strlen(str);
 	char *dest;
 
 	if (!str)
 		return (NULL);
-	dest = malloc(sizeof(char) * size);
+	dest = malloc(sizeof(char) * (size + 1));
 	if (!dest)
 		return (NULL);
-	for (i = 0; i < size; i++)
-		*(dest + i) = *(str + i);
+	_memcpy(dest, str, size + 1);
 
-	*(dest + i) = '\0';
 	return (dest);
 }
